@@ -8,6 +8,7 @@ from tqdm.autonotebook import tqdm
 from model.BrownianBridge.BrownianBridgeModel import BrownianBridgeModel
 from model.BrownianBridge.base.modules.encoders.modules import SpatialRescaler
 from model.VQGAN.vqgan import VQModel
+from diffusers.models import AutoencoderKL
 
 
 def disabled_train(self, mode=True):
@@ -20,7 +21,8 @@ class LatentBrownianBridgeModel(BrownianBridgeModel):
     def __init__(self, model_config):
         super().__init__(model_config)
 
-        self.vqgan = VQModel(**vars(model_config.VQGAN.params)).eval()
+        self.vqgan = AutoencoderKL.from_pretrained(f"stabilityai/sd-vae-ft-ema").to(device).eval() #VQModel(**vars(model_config.VQGAN.params)).eval()
+        self.vqgan.requires_grad_(False)
         self.vqgan.train = disabled_train
         for param in self.vqgan.parameters():
             param.requires_grad = False
@@ -74,7 +76,7 @@ class LatentBrownianBridgeModel(BrownianBridgeModel):
     def encode(self, x, cond=True, normalize=None):
         normalize = self.model_config.normalize_latent if normalize is None else normalize
         model = self.vqgan
-        x_latent = model.encoder(x)
+        x_latent = model.encoder(x).latent_dist.sample().mul_(0.18215)
         if not self.model_config.latent_before_quant_conv:
             x_latent = model.quant_conv(x_latent)
         if normalize:
@@ -95,8 +97,8 @@ class LatentBrownianBridgeModel(BrownianBridgeModel):
         model = self.vqgan
         if self.model_config.latent_before_quant_conv:
             x_latent = model.quant_conv(x_latent)
-        x_latent_quant, loss, _ = model.quantize(x_latent)
-        out = model.decode(x_latent_quant)
+        # x_latent_quant, loss, _ = model.quantize(x_latent)
+        out = model.decode(x_latent).latent_dist.sample().mul_(0.18215)
         return out
 
     @torch.no_grad()

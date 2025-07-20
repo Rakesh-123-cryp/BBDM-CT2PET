@@ -21,7 +21,7 @@ class LatentBrownianBridgeModel(BrownianBridgeModel):
     def __init__(self, model_config):
         super().__init__(model_config)
 
-        self.vqgan = AutoencoderKL.from_pretrained(f"stabilityai/sd-vae-ft-ema").to(device).eval() #VQModel(**vars(model_config.VQGAN.params)).eval()
+        self.vqgan = AutoencoderKL.from_pretrained(f"stabilityai/sd-vae-ft-ema").to('cuda').eval() #VQModel(**vars(model_config.VQGAN.params)).eval()
         self.vqgan.requires_grad_(False)
         self.vqgan.train = disabled_train
         for param in self.vqgan.parameters():

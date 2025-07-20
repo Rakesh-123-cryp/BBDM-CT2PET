@@ -99,7 +99,7 @@ class LatentBrownianBridgeModel(BrownianBridgeModel):
         # if self.model_config.latent_before_quant_conv:
         #     x_latent = model.quant_conv(x_latent)
         # x_latent_quant, loss, _ = model.quantize(x_latent)
-        out = model.decode(x_latent).latent_dist.sample().mul_(0.18215)
+        out = model.decode(x_latent / 0.18215).sample
         return out
 
     @torch.no_grad()

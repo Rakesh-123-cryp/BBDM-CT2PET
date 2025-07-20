@@ -385,6 +385,7 @@ class BaseRunner(ABC):
         try:
             accumulate_grad_batches = self.config.training.accumulate_grad_batches
             for epoch in range(start_epoch, self.config.training.n_epochs):
+                print(f"Epoch {epoch}/{self.config.training.n_epochs}")
                 if self.global_step > self.config.training.n_steps:
                     break
 
@@ -393,6 +394,7 @@ class BaseRunner(ABC):
                     val_sampler.set_epoch(epoch)
 
                 pbar = tqdm(train_loader, total=len(train_loader), smoothing=0.01, disable=not self.is_main_process)
+                print("start epoch")
                 self.global_epoch = epoch
                 start_time = time.time()
                 for train_batch in pbar:

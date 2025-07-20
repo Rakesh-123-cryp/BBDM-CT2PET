@@ -184,7 +184,7 @@ class BBDMRunner(DiffusionBaseRunner):
         print(sample_path)
 
         (x, x_name), (x_cond, x_cond_name) = batch
-
+        print("#######", x.shape, x_cond.shape)
         batch_size = x.shape[0] if x.shape[0] < 4 else 4
 
         x = x[0:batch_size].to(self.config.training.device[0])

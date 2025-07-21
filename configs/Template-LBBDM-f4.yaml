@@ -17,7 +17,7 @@ data:
   dataset_name: 'dataset_name'
   dataset_type: 'custom_aligned'
   dataset_config:
-    dataset_path: '/kaggle/input/autopet-brightness-png'
+    dataset_path: '/kaggle/input/autopet-brightness-png/autopet_preprocessed_brightness'
     image_size: 128
     channels: 3
     to_normal: True

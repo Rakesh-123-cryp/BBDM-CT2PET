@@ -18,12 +18,12 @@ data:
   dataset_type: 'custom_aligned'
   dataset_config:
     dataset_path: '/kaggle/input/autopet-brightness-png/autopet_preprocessed_brightness'
-    image_size: 128
+    image_size: 256
     channels: 3
     to_normal: True
     flip: False
   train:
-    batch_size: 32
+    batch_size: 16
     shuffle: True
   val:
     batch_size: 8
@@ -33,7 +33,7 @@ data:
     # shuffle: False
 
 model:
-  model_name: "LBBDM-f4" # part of result path
+  model_name: "LBBDM-f4-256" # part of result path
   model_type: "LBBDM" # specify a module
   latent_before_quant_conv: True
   normalize_latent: False
@@ -103,7 +103,7 @@ model:
       max_var: 1.0 # maximum variance
 
       UNetParams:
-        image_size: 16
+        image_size: 64
         in_channels: 4
         model_channels: 128
         out_channels: 4
@@ -114,6 +114,7 @@ model:
           - 8
         channel_mult: !!python/tuple
           - 1
+          - 2
           - 4
           - 8
         conv_resample: True

@@ -77,6 +77,7 @@ class LatentBrownianBridgeModel(BrownianBridgeModel):
         normalize = self.model_config.normalize_latent if normalize is None else normalize
         model = self.vqgan
         x_latent = model.encode(x).latent_dist.sample().mul_(0.18215)
+        print(x_latent.shape)
         # if not self.model_config.latent_before_quant_conv:
         #     print("latent before quant conv", x_latent.shape)
         #     x_latent = model.quant_conv(x_latent)

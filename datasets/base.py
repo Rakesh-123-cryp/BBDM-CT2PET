@@ -41,6 +41,8 @@ class ImagePathDataset(Dataset):
 
         image = transform(image)
 
+        image = image / image.max()
+        
         if self.to_normal:
             image = (image - 0.5) * 2.
             image.clamp_(-1., 1.)
